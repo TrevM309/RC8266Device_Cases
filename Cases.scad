@@ -4,12 +4,17 @@ $fn = 50;
 //mainPcb();
 //translate([25,0,0]) uiPcb();
 //esc();
+//battery();
+//bcase();
+//bassy();
+//bprint();
+lever();
 //case1();
 //case2();
 //case3();
 //case4();
 //assy();
-print();
+//print();
 
 module print()
 {
@@ -19,15 +24,90 @@ module print()
     translate([  2, -1,7]) rotate([180,0,0]) case4();
 }
 
+module bprint()
+{
+    rotate([0,-90,0]) bcase();
+}
+
+module bassy()
+{
+    //cube([65,28.5,9]);
+    translate([0,-28.5-1.5-0.5,0]) bcase();
+    translate([2,-28.5-0.25,2])   battery();
+    translate([2,0.25,2]) battery();
+}
+
 module assy()
 {
     case1();
     translate([1.5,1.5,5]) mainPcb();
-    translate([0,0,6.1]) case2();
-    translate([1.5,3.5,10.5]) esc();
-    translate([0,0,12.2]) case3();
-    translate([1.5,3.5,16.4]) uiPcb();
-    translate([0,0,17.3]) case4();
+    //translate([0,0,6.1]) case2();
+    //translate([1.5,3.5,10.5]) esc();
+    //translate([0,0,12.2]) case3();
+    //translate([1.5,3.5,16.4]) uiPcb();
+    //translate([0,0,17.3]) case4();
+}
+
+module bcase()
+{
+    //cube([65,28.5,9]);
+    difference()
+    {
+        cube([69,(28.5 * 2)+3+1,9+3+1]);
+        translate([1.5,1.5,1.5])
+            cube([70,(28.5 * 2)+1,9+1]);
+    }
+}
+
+module lever()
+{
+    difference()
+    {
+        union()
+        {
+            translate([4,0,0])
+                cylinder(d=8,h=2.5);
+            translate([4,-4,0])
+                cube([17.5-4,8,2.5]);
+            translate([17.5+0.5,0,0])
+                cylinder(d=8,h=2.5);
+        }
+        translate([4,0,-0.1])
+            cylinder(d=4,h=2.7);
+    }
+    translate([17.5+3,0,0])
+        cylinder(d=3,h=19);
+    /*
+    difference()
+    {
+        union()
+        {
+            translate([17.5+4-1.5,-2,0])
+                cube([1.5,4,10.5+2]);
+            translate([17.5+4-1.5,0,10.5+2])
+                rotate([0,90,0])
+                    cylinder(d=4,h=1.5);
+        }
+        translate([17.5+4-1.6,0,10.5+2])
+            rotate([0,90,0])
+                cylinder(d=2,h=2);
+    }
+    */
+    difference()
+    {
+        translate([10, 12,0])
+            cylinder(d=8,h=19.5);
+        translate([10, 12,-0.1])
+            cylinder(d=2,h=19.7);
+        translate([14, 12,5])
+            rotate([0,-90,0])
+                cylinder(d=4,h=8.2);
+        translate([5.8, 10,5])
+            cube([8.2,4,15]);
+    }
+    
+    translate([10,-12,0])
+        cylinder(d=10,h=19.5);
 }
 
 module case1()
@@ -299,10 +379,15 @@ module case4()
     }
 }
 
+module battery()
+{
+    color("silver") cube([65,28.5,9]);
+}
+
 module esc()
 {
     // pcb
-    color("red") cube([25,22,1.5]);
+    color("red") cube([23,22,1.5]);
     // switch
     translate([-2,13,1.4]) color("black")
         cube([3,8.5,4.1]);
