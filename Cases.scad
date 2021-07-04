@@ -8,20 +8,28 @@ $fn = 50;
 //bcase();
 //bassy();
 //bprint();
-lever();
+//lever();
 //case1();
 //case2();
 //case3();
 //case4();
+//frame();
+//case();
+//lid();
 //assy();
-//print();
+print();
 
 module print()
 {
+    translate([-22,1,-5])   frame();
+    translate([-26,-41,-2]) case();
+    translate([ 35,-39, 0]) lid();
+    /*
     translate([-30,  2,0]) case1();
     translate([-30,-35,0]) case2();
     translate([  2,  2,0]) case3();
     translate([  2, -1,7]) rotate([180,0,0]) case4();
+    */
 }
 
 module bprint()
@@ -39,13 +47,203 @@ module bassy()
 
 module assy()
 {
-    case1();
-    translate([1.5,1.5,5]) mainPcb();
-    //translate([0,0,6.1]) case2();
-    //translate([1.5,3.5,10.5]) esc();
-    //translate([0,0,12.2]) case3();
-    //translate([1.5,3.5,16.4]) uiPcb();
-    //translate([0,0,17.3]) case4();
+    translate([-27,1.5,7]) mainPcb();
+    translate([-3,1.5,6.5]) esc();
+    translate([-5.25,31,17.5]) 
+        rotate([0,0,180])
+            uiPcb();
+    frame();
+    case();
+    translate([-7,0,25.5]) rotate([0,180,0]) lid();
+}
+
+module lid()
+{
+    difference()
+    {
+        translate([-34,-4,0])
+            cube([61,45,6]);
+        // hollow out
+        translate([-32.5,-2.5,1])
+            cube([58,42,6]);
+        // retaining slots
+        translate([-32.5,-2,1.8])
+            rotate([0,90,0])
+                cylinder(d=1.5,h=58);
+        translate([-32.5,39.5,1.8])
+            rotate([0,90,0])
+                cylinder(d=1.5,h=58);
+        // clear LEDs
+        translate([2,16.2,-0.1])
+            cylinder(d=5.5,h=3);
+        translate([2,6.5,-0.1])
+            cylinder(d=5.5,h=3);
+        // clear switch
+        translate([5.5,24.2,-0.1])
+            cube([8.2,4,4.5]);
+        // clear USB
+        translate([-0.4,21.4,-0.1])
+            cube([3.7,8,4.5]);
+        // clear battery wires
+        translate([-34.1,14,3])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([-34.1,18,3])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([-34.1,14,1])
+            cube([1.7,4,4]);
+        translate([-34.1,12,3])
+            cube([1.7,8,3.1]);
+        // clear motor wires
+        translate([25.4,14,3])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([25.4,18,3])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([25.4,14,1])
+            cube([1.7,4,4]);
+        translate([25.4,12,3])
+            cube([1.7,8,3.1]);
+    }
+}
+
+module case()
+{
+    difference()
+    {
+        translate([-32,-2,2])
+            cube([57,41,22]);
+        // hollow out
+        translate([-30.5,-0.5,3])
+            cube([54,38,22]);
+        // clear battery wires
+        translate([-32.1,14,24])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([-32.1,18,24])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([-32.1,14,22])
+            cube([1.7,4,3]);
+        // clear motor wires
+        translate([23.4,14,24])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([23.4,18,24])
+            rotate([0,90,0])
+                cylinder(d=4,h=1.7);
+        translate([23.4,14,22])
+            cube([1.7,4,3]);
+        // slots for contracting
+        translate([-32.1,-0.5,20])
+            cube([57.2,1,4.1]);
+        translate([-32.1,36.5,20])
+            cube([57.2,1,4.1]);
+    }
+    // near frame support
+    difference()
+    {
+        translate([-31.5,-1.5,2])
+            cube([56,3.2,3.5]);
+        translate([-27.5,0,4.5])
+            cube([48,2,3.5]);
+    }
+    // far frame support
+    difference()
+    {
+        translate([-31.5,30,2])
+            cube([31,4,3.5]);
+        translate([-27.5,29,4.5])
+            cube([24.5,3.5,3.5]);
+    }
+    // ESC frame support
+    difference()
+    {
+        translate([2,23.7,2])
+            cube([22,4,3.5]);
+        translate([1.9,23.6,4.5])
+            cube([18.6,2,3.5]);
+    }
+    //lid retain
+    translate([-32,-2,23.5])
+        rotate([0,90,0])
+            cylinder(d=1,h=57);
+    translate([-32,39,23.5])
+        rotate([0,90,0])
+            cylinder(d=1,h=57);
+}
+
+module frame()
+{
+    // PCBa slide sideways into frame
+    // frame drops into case
+    // lid goes onto top of case
+    // cross piece
+    difference()
+    {
+        translate([-5,1,5])
+            cube([1.5,31,15]);
+        translate([-5.2,14,7.5])
+            cube([1.8,9.5,5]);
+    }
+    // near wall
+    difference()
+    {
+        translate([-27,0.5,5])
+            cube([47,2,15]);
+        // clear main PCB
+        translate([-27.1,1.2,6.7])
+            cube([22,2,1.5]);
+        // clear main PCB connector blocks
+        translate([-27.1,1.8,4.9])
+            cube([22,2,2]);
+        // clear UI PCB
+        translate([-27.1,1.5,17.2])
+            cube([22,2,1.5]);
+        // clear ESC PCB
+        translate([-3.4,1.2,6.3])
+            cube([24,2,2]);
+        // clear ESC under components
+        translate([-3.4,2,4.9])
+            cube([24,2,2]);
+        // clear ESC top components
+        translate([-3.4,1.5,7])
+            cube([24,2,1.7]);
+        translate([-3.4,2.3,7])
+            cube([24,2,4.5]);
+    }
+    // ESC wall
+    difference()
+    {
+        translate([-4,23,5])
+            cube([24,2,7]);
+        // clear ESC PCB
+        translate([-3.4,22.9,6.3])
+            cube([24,0.8,2]);
+        // clear ESC under components
+        translate([-3.4,22.9,4.9])
+            cube([24,0.6,2]);
+        // clear ESC top components
+        translate([-4,22.9,7])
+            cube([24.5,0.5,5.5]);
+    }
+    // far wall
+    difference()
+    {
+        translate([-27,30,5])
+            cube([23,2,15]);
+        // clear main PCB
+        translate([-27.1,29.9,6.7])
+            cube([22,0.8,1.5]);
+        // clear main PCB ariel
+        translate([-27.1,29.9,7.5])
+            cube([16.7,3,1.5]);
+        // clear UI PCB
+        translate([-27.1,29.9,17.2])
+            cube([22,1.4,1.5]);
+    }
 }
 
 module bcase()
@@ -426,19 +624,19 @@ module esc()
     translate([20.5,1.5,-0.75])
         color("white")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     translate([20.5,3.5,-0.75])
         color("red")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     translate([20.5,5.5,-0.75])
         color("black")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     translate([20.5,12,-0.75])
         color("red")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     translate([20.5,14.5,-0.75])
         color("red")
             rotate([0,90,0])
@@ -450,7 +648,7 @@ module esc()
     translate([20.5,20.5,-0.75])
         color("black")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     // under components
     translate([0.2,1,-1.5]) color("orange")
         cube([19.5,21,1.6]);
@@ -597,11 +795,11 @@ module uiPcb()
     translate([18.2,24,0.8+0.75])
         color("black")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     translate([18.2,26,0.8+0.75])
         color("red")
             rotate([0,90,0])
-                cylinder(d=1.5,h=20);
+                cylinder(d=1.5,h=10);
     
     
 }
@@ -669,6 +867,9 @@ module mainPcb()
         color("red") cube([2.54,3*2.54,2.54]);
     translate([1.8+(3.8*4),0.7,-2.54])
         color("red") cube([2.54,2*2.54,2.54]);
+    // heatsink
+    translate([5.5,17.25,4])
+        color("silver") cube([9,9,5]);
 }
 
 module imp()
